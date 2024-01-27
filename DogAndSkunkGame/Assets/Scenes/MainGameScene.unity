@@ -1213,7 +1213,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SkunkNormal: {fileID: -8833472089567809363, guid: 7c1b59b799568574581899328e425631, type: 3}
+  SkunkWarn: {fileID: -1187233368767667245, guid: 8e9c4fc6b485e424d84956176bcbafc5, type: 3}
+  SkunkLooking: {fileID: -8358839594038393641, guid: 3ce2e13735a731849aec9d55556e978d, type: 3}
   SkunkAngry: {fileID: -5468902546967967652, guid: 61363b67a7835174baea385d37cffc6f, type: 3}
+  phaseTwoThreshold: 0.6
+  phaseThreeThreshold: 0.33
+  phaseOneMinIdleTime: 8
+  phaseOneMaxIdleTime: 10
+  phaseTwoMinIdleTime: 5
+  phaseTwoMaxIdleTime: 7
+  phaseThreeMinIdleTime: 1
+  phaseThreeMaxIdleTime: 4
+  phaseOneLookTime: 5
+  phaseTwoLookTime: 4
+  phaseThreeLookTime: 3
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

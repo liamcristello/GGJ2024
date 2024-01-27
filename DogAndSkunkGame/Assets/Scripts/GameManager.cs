@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     public static event LoseAction LoseGame;
 
     // Bools to check if the player has been caught
-    private bool dogIsDrinking = false;
+    private bool dogIsEating = false;
     private bool skunkIsLooking = false;
 
     // Start is called before the first frame update
@@ -34,8 +34,8 @@ public class GameManager : MonoBehaviour
         // Subscribe to events
         SkunkManager.StartLooking += StartLooking;
         SkunkManager.StopLooking += StopLooking;
-        DogManager.StartDrinking += StartDrink;
-        DogManager.StopDrinking += StopDrink;
+        DogManager.StartEating += StartEat;
+        DogManager.StopEating += StopEat;
     }
 
     /// <summary>
@@ -48,10 +48,10 @@ public class GameManager : MonoBehaviour
         SkunkManager.StopLooking -= StopLooking;
     }
 
-    #region "Drink water"
-    private void StartDrink()
+    #region "Eating functions"
+    private void StartEat()
     {
-        dogIsDrinking = true;
+        dogIsEating = true;
         CheckIfCaught();
     }
 
@@ -60,9 +60,9 @@ public class GameManager : MonoBehaviour
         UIMan.OnDrink();
     }
 
-    private void StopDrink()
+    private void StopEat()
     {
-        dogIsDrinking = false;
+        dogIsEating = false;
     }
     #endregion
 
@@ -84,7 +84,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     private void CheckIfCaught()
     {
-        if (dogIsDrinking && skunkIsLooking)
+        if (dogIsEating && skunkIsLooking)
         {
             LoseGame?.Invoke();
         }

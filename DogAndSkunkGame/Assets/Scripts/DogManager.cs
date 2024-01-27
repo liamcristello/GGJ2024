@@ -5,8 +5,8 @@ using UnityEngine;
 public class DogManager : MonoBehaviour
 {
     public delegate void DrinkAction();
-    public static event DrinkAction StartDrinking;
-    public static event DrinkAction StopDrinking;
+    public static event DrinkAction StartEating;
+    public static event DrinkAction StopEating;
 
     public Sprite DogNormal;
     public Sprite DogScared;
@@ -54,7 +54,7 @@ public class DogManager : MonoBehaviour
 
     private void StartToDrink()
     {
-        StartDrinking?.Invoke();
+        StartEating?.Invoke();
         AlterDogColor();
     }
 
@@ -65,7 +65,7 @@ public class DogManager : MonoBehaviour
 
     private void EndDrink()
     {
-        StopDrinking?.Invoke();
+        StopEating?.Invoke();
         ResetDogColor();
     }
 
