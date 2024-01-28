@@ -10,11 +10,15 @@ public class SkunkManager : MonoBehaviour
     public delegate void SkunkAction();
     public static event SkunkAction StartLooking;
     public static event SkunkAction StopLooking;
+    public static event SkunkAction ReachedPhaseTwo;
+    public static event SkunkAction ReachedPhaseThree;
 
     public Sprite SkunkNormal;
     public Sprite SkunkWarn;
     public Sprite SkunkLooking;
     public Sprite SkunkAngry;
+    public Sprite SkunkSpraying;
+    public GameObject SprayCloud;
 
     public float phaseTwoThreshold;
     public float phaseThreeThreshold;
@@ -49,6 +53,8 @@ public class SkunkManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SprayCloud.SetActive(false);
+
         currentPhase = Phase.One;
         lookTime = phaseOneLookTime;
         warnTime = lookTime * warnPercentageOfIdleTime;
@@ -71,6 +77,7 @@ public class SkunkManager : MonoBehaviour
         UIManager.FoodSliderChanged += CheckIfPassedThreshold;
         GameManager.WinGame += OnWinGame;
         GameManager.LoseGame += OnLoseGame;
+        GameManager.PlayerGetsSprayed += EnterSprayMode;
     }
 
     /// <summary>
@@ -82,6 +89,7 @@ public class SkunkManager : MonoBehaviour
         UIManager.FoodSliderChanged -= CheckIfPassedThreshold;
         GameManager.WinGame -= OnWinGame;
         GameManager.LoseGame -= OnLoseGame;
+        GameManager.PlayerGetsSprayed -= EnterSprayMode;
     }
 
     private void EnterIdleMode()
@@ -146,11 +154,13 @@ public class SkunkManager : MonoBehaviour
         if (currentPhase == Phase.One && foodValue <= phaseTwoThreshold)
         {
             currentPhase = Phase.Two;
+            ReachedPhaseTwo?.Invoke();
         }
 
         else if (currentPhase == Phase.Two && foodValue <= phaseThreeThreshold)
         {
             currentPhase = Phase.Three;
+            ReachedPhaseThree?.Invoke();
         }
     }
 
@@ -163,6 +173,12 @@ public class SkunkManager : MonoBehaviour
     private void OnWinGame()
     {
         StopAllCoroutines();
-        EnterIdleMode();
+        EnterAngryMode();
+    }
+
+    private void EnterSprayMode()
+    {
+        gameObject.GetComponent<SpriteRenderer>().sprite = SkunkSpraying;
+        SprayCloud.SetActive(true);
     }
 }

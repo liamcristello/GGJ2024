@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public delegate void GameAction();
     public static event GameAction LoseGame;
     public static event GameAction WinGame;
+    public static event GameAction PlayerGetsSprayed;
 
     // Bools to check if the player has been caught
     private bool dogIsEating = false;
@@ -25,11 +26,11 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            string currentSceneName = SceneManager.GetActiveScene().name;
-            SceneManager.LoadScene(currentSceneName);
-        }
+        //if (Input.GetKeyDown(KeyCode.R))
+        //{
+        //    string currentSceneName = SceneManager.GetActiveScene().name;
+        //    SceneManager.LoadScene(currentSceneName);
+        //}
     }
 
     /// <summary>
@@ -91,7 +92,7 @@ public class GameManager : MonoBehaviour
     {
         if (dogIsEating && skunkIsLooking)
         {
-            LoseGame?.Invoke();
+            StartCoroutine(LoseGameSequence());
         }
     }
 
@@ -101,5 +102,18 @@ public class GameManager : MonoBehaviour
         {
             WinGame?.Invoke();
         }
+    }
+
+    private IEnumerator LoseGameSequence()
+    {
+        LoseGame?.Invoke();
+
+        yield return new WaitForSecondsRealtime(3.0f);
+        PlayerGetsSprayed?.Invoke();
+
+        yield return new WaitForSecondsRealtime(3.0f);
+
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneIndex + 1);
     }
 }

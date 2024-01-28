@@ -12,11 +12,13 @@ public class UIManager : MonoBehaviour
 
     public Slider FoodSlider;
     public Image LoseImage;
+    public Image WinImage;
 
     // Start is called before the first frame update
     void Start()
     {
         LoseImage.gameObject.SetActive(false);
+        WinImage.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -77,5 +79,6 @@ public class UIManager : MonoBehaviour
     private void OnWinGame()
     {
         EndEating();
+        WinImage.gameObject.SetActive(true);
     }
 }

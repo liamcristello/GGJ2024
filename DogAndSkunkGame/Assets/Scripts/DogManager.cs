@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class DogManager : MonoBehaviour
 {
@@ -11,13 +12,16 @@ public class DogManager : MonoBehaviour
     public Sprite DogNormal;
     public Sprite DogScared;
     public Sprite DogCaught;
+    public Sprite DogSprayed;
+    public Sprite DogRun;
 
+    private bool wonGame = false;
     private bool disableInput = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -35,6 +39,14 @@ public class DogManager : MonoBehaviour
                 EndEat();
             }
         }
+        else if (wonGame)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                string currentSceneName = SceneManager.GetActiveScene().name;
+                SceneManager.LoadScene(currentSceneName);
+            }
+        }
     }
 
     /// <summary>
@@ -45,6 +57,7 @@ public class DogManager : MonoBehaviour
         // Subscribe to events
         GameManager.WinGame += OnWinGame;
         GameManager.LoseGame += OnLoseGame;
+        GameManager.PlayerGetsSprayed += OnGetSprayed;
     }
 
     /// <summary>
@@ -55,6 +68,7 @@ public class DogManager : MonoBehaviour
         // Unsubscribe from events to avoid memory leaks
         GameManager.WinGame -= OnWinGame;
         GameManager.LoseGame -= OnLoseGame;
+        GameManager.PlayerGetsSprayed -= OnGetSprayed;
     }
 
     private void StartToEat()
@@ -84,10 +98,24 @@ public class DogManager : MonoBehaviour
         gameObject.GetComponent<SpriteRenderer>().sprite = DogCaught;
     }
 
+    private void DogSprayedAnim()
+    {
+        gameObject.GetComponent<SpriteRenderer>().sprite = DogSprayed;
+    }
+
+    private void DogRunAnim()
+    {
+        gameObject.GetComponent<SpriteRenderer>().sprite = DogRun;
+        transform.position = new Vector3(-6.73f, transform.position.y, transform.position.z);
+        transform.localScale = new Vector3(-1.0f, transform.localScale.y, transform.localScale.z);
+    }
+
     private void OnWinGame()
     {
         disableInput = true;
+        wonGame = true;
         EndEat();
+        DogRunAnim();
     }
 
     private void OnLoseGame()
@@ -95,5 +123,10 @@ public class DogManager : MonoBehaviour
         disableInput = true;
         EndEat();
         DogCaughtAnim();
+    }
+
+    private void OnGetSprayed()
+    {
+        DogSprayedAnim();
     }
 }
