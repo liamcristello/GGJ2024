@@ -445,7 +445,6 @@ MonoBehaviour:
   DogCaught: {fileID: 815354457984823310, guid: e18c01dc0ca28954ca30ec4135e2be62, type: 3}
   DogSprayed: {fileID: -9184150718771802323, guid: 970c157ee746b1e4e9c603be78e1ee3b, type: 3}
   DogRun: {fileID: 9042615099814272868, guid: 4c6e2ec5d8494654887dd9e990fc2fbb, type: 3}
-  DustCloud: {fileID: 1934730883}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -679,7 +678,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -693,7 +692,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1904857501}
   m_FillRect: {fileID: 992359431}
   m_HandleRect: {fileID: 1904857500}
@@ -979,7 +978,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa2ba104c88499e4ea9fdb59335be77f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  foodDelta: 0.00003
+  foodDelta: 0.0003
   FoodSlider: {fileID: 833002964}
   LoseImage: {fileID: 1966581502}
   WinImage: {fileID: 683571574}
@@ -1298,7 +1297,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 800, y: 600}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 0.5
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
