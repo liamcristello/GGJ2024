@@ -97,14 +97,12 @@ public class SkunkManager : MonoBehaviour
 
     private void EnterLookMode()
     {
-        Debug.Log("Looking respectfully?");
         StartLooking?.Invoke();
         gameObject.GetComponent<SpriteRenderer>().sprite = SkunkLooking;
     }
 
     private void EnterAngryMode()
     {
-        Debug.Log("Angy");
         gameObject.GetComponent<SpriteRenderer>().sprite = SkunkAngry;
     }
 
