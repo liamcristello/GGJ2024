@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class DogManager : MonoBehaviour
 {
-    public delegate void DrinkAction();
-    public static event DrinkAction StartEating;
-    public static event DrinkAction StopEating;
+    public delegate void DogAction();
+    public static event DogAction StartEating;
+    public static event DogAction StopEating;
 
     public Sprite DogNormal;
     public Sprite DogScared;
+    public Sprite DogCaught;
+
+    private bool disableInput = false;
 
     // Start is called before the first frame update
     void Start()
@@ -20,17 +23,17 @@ public class DogManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (!disableInput)
         {
-            StartToDrink();
-        }
-        else if (Input.GetMouseButton(0))
-        {
-            ContinueDrink();
-        }
-        else if (Input.GetMouseButtonUp(0))
-        {
-            EndDrink();
+            if (Input.GetMouseButtonDown(0))
+            {
+                StartToEat();
+            }
+
+            else if (Input.GetMouseButtonUp(0))
+            {
+                EndEat();
+            }
         }
     }
 
@@ -40,7 +43,8 @@ public class DogManager : MonoBehaviour
     private void OnEnable()
     {
         // Subscribe to events
-        
+        GameManager.WinGame += OnWinGame;
+        GameManager.LoseGame += OnLoseGame;
     }
 
     /// <summary>
@@ -49,33 +53,47 @@ public class DogManager : MonoBehaviour
     private void OnDisable()
     {
         // Unsubscribe from events to avoid memory leaks
-
+        GameManager.WinGame -= OnWinGame;
+        GameManager.LoseGame -= OnLoseGame;
     }
 
-    private void StartToDrink()
+    private void StartToEat()
     {
         StartEating?.Invoke();
-        AlterDogColor();
+        DogEatingAnim();
     }
 
-    private void ContinueDrink()
-    {
-
-    }
-
-    private void EndDrink()
+    private void EndEat()
     {
         StopEating?.Invoke();
-        ResetDogColor();
+        DogIdleAnim();
     }
 
-    private void ResetDogColor()
+    private void DogIdleAnim()
     {
         gameObject.GetComponent<SpriteRenderer>().sprite = DogNormal;
     }
 
-    private void AlterDogColor()
+    private void DogEatingAnim()
     {
         gameObject.GetComponent<SpriteRenderer>().sprite = DogScared;
+    }
+
+    private void DogCaughtAnim()
+    {
+        gameObject.GetComponent<SpriteRenderer>().sprite = DogCaught;
+    }
+
+    private void OnWinGame()
+    {
+        disableInput = true;
+        EndEat();
+    }
+
+    private void OnLoseGame()
+    {
+        disableInput = true;
+        EndEat();
+        DogCaughtAnim();
     }
 }

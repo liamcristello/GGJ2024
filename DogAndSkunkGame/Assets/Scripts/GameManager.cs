@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
     public UIManager UIMan;
 
-    public delegate void LoseAction();
-    public static event LoseAction LoseGame;
+    public delegate void GameAction();
+    public static event GameAction LoseGame;
+    public static event GameAction WinGame;
 
     // Bools to check if the player has been caught
     private bool dogIsEating = false;
@@ -23,7 +25,11 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            string currentSceneName = SceneManager.GetActiveScene().name;
+            SceneManager.LoadScene(currentSceneName);
+        }
     }
 
     /// <summary>
@@ -36,6 +42,7 @@ public class GameManager : MonoBehaviour
         SkunkManager.StopLooking += StopLooking;
         DogManager.StartEating += StartEat;
         DogManager.StopEating += StopEat;
+        UIManager.FoodSliderChanged += CheckForWin;
     }
 
     /// <summary>
@@ -46,6 +53,9 @@ public class GameManager : MonoBehaviour
         // Unsubscribe from events to avoid memory leaks
         SkunkManager.StartLooking -= StartLooking;
         SkunkManager.StopLooking -= StopLooking;
+        DogManager.StartEating -= StartEat;
+        DogManager.StopEating -= StopEat;
+        UIManager.FoodSliderChanged -= CheckForWin;
     }
 
     #region "Eating functions"
@@ -53,11 +63,6 @@ public class GameManager : MonoBehaviour
     {
         dogIsEating = true;
         CheckIfCaught();
-    }
-
-    private void Drink()
-    {
-        UIMan.OnDrink();
     }
 
     private void StopEat()
@@ -87,6 +92,14 @@ public class GameManager : MonoBehaviour
         if (dogIsEating && skunkIsLooking)
         {
             LoseGame?.Invoke();
+        }
+    }
+
+    private void CheckForWin(float foodValue)
+    {
+        if (foodValue <= 0.0f)
+        {
+            WinGame?.Invoke();
         }
     }
 }

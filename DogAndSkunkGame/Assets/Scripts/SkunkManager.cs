@@ -30,6 +30,9 @@ public class SkunkManager : MonoBehaviour
     public float phaseTwoLookTime;
     public float phaseThreeLookTime;
 
+    public float minimumWarnTime;
+    public float warnPercentageOfIdleTime;
+
     private float idleTime;
     private float lookTime;
     private float warnTime;
@@ -48,7 +51,7 @@ public class SkunkManager : MonoBehaviour
     {
         currentPhase = Phase.One;
         lookTime = phaseOneLookTime;
-        warnTime = lookTime * 0.2f;
+        warnTime = lookTime * warnPercentageOfIdleTime;
 
         StartCoroutine(SkunkLoop());
     }
@@ -65,7 +68,9 @@ public class SkunkManager : MonoBehaviour
     private void OnEnable()
     {
         // Subscribe to events
-
+        UIManager.FoodSliderChanged += CheckIfPassedThreshold;
+        GameManager.WinGame += OnWinGame;
+        GameManager.LoseGame += OnLoseGame;
     }
 
     /// <summary>
@@ -74,7 +79,9 @@ public class SkunkManager : MonoBehaviour
     private void OnDisable()
     {
         // Unsubscribe from events to avoid memory leaks
-        
+        UIManager.FoodSliderChanged -= CheckIfPassedThreshold;
+        GameManager.WinGame -= OnWinGame;
+        GameManager.LoseGame -= OnLoseGame;
     }
 
     private void EnterIdleMode()
@@ -90,12 +97,16 @@ public class SkunkManager : MonoBehaviour
 
     private void EnterLookMode()
     {
+        Debug.Log("Looking respectfully?");
         StartLooking?.Invoke();
         gameObject.GetComponent<SpriteRenderer>().sprite = SkunkLooking;
     }
 
-    // TODO: GetSuspicious event?
-    // With sprite change and music? Maybe visual effect?
+    private void EnterAngryMode()
+    {
+        Debug.Log("Angy");
+        gameObject.GetComponent<SpriteRenderer>().sprite = SkunkAngry;
+    }
 
     private IEnumerator SkunkLoop()
     {
@@ -111,8 +122,6 @@ public class SkunkManager : MonoBehaviour
 
         yield return StartCoroutine(SkunkLoop());
     }
-    
-    // TODO: interrupt idle and re-roll if player crosses a threshold?
 
     private void RandomizeIdleTime()
     {
@@ -131,6 +140,31 @@ public class SkunkManager : MonoBehaviour
                 return;
         }
 
-        warnTime = Mathf.Max(idleTime * 0.2f, 0.5f);
+        warnTime = Mathf.Max(idleTime * warnPercentageOfIdleTime, minimumWarnTime);
+    }
+
+    private void CheckIfPassedThreshold(float foodValue)
+    {
+        if (currentPhase == Phase.One && foodValue <= phaseTwoThreshold)
+        {
+            currentPhase = Phase.Two;
+        }
+
+        else if (currentPhase == Phase.Two && foodValue <= phaseThreeThreshold)
+        {
+            currentPhase = Phase.Three;
+        }
+    }
+
+    private void OnLoseGame()
+    {
+        StopAllCoroutines();
+        EnterAngryMode();
+    }
+
+    private void OnWinGame()
+    {
+        StopAllCoroutines();
+        EnterIdleMode();
     }
 }

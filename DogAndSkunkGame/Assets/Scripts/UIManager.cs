@@ -5,9 +5,12 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    public float drinkDelta;
+    public delegate void SliderAction(float value);
+    public static event SliderAction FoodSliderChanged;
 
-    public Slider DrinkSlider;
+    public float foodDelta;
+
+    public Slider FoodSlider;
     public Image LoseImage;
 
     // Start is called before the first frame update
@@ -29,6 +32,9 @@ public class UIManager : MonoBehaviour
     {
         // Subscribe to events
         GameManager.LoseGame += OnLose;
+        GameManager.WinGame += OnWinGame;
+        DogManager.StartEating += BeginEating;
+        DogManager.StopEating += EndEating;
     }
 
     /// <summary>
@@ -38,15 +44,38 @@ public class UIManager : MonoBehaviour
     {
         // Unsubscribe from events to avoid memory leaks
         GameManager.LoseGame -= OnLose;
+        GameManager.WinGame -= OnWinGame;
+        DogManager.StartEating -= BeginEating;
+        DogManager.StopEating -= EndEating;
     }
 
-    public void OnDrink()
+    public void BeginEating()
     {
-        DrinkSlider.value -= drinkDelta;
+        StartCoroutine(Eat());
     }
 
-    public void OnLose()
+    public void EndEating()
     {
+        StopAllCoroutines();
+    }
+
+    private void OnLose()
+    {
+        EndEating();
         LoseImage.gameObject.SetActive(true);
+    }
+
+    private IEnumerator Eat()
+    {
+        FoodSlider.value -= foodDelta;
+        FoodSliderChanged?.Invoke(FoodSlider.value);
+
+        yield return new WaitForEndOfFrame();
+        StartCoroutine(Eat());
+    }
+
+    private void OnWinGame()
+    {
+        EndEating();
     }
 }

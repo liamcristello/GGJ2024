@@ -220,6 +220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DogNormal: {fileID: -3994744024693093290, guid: e9c82271e985243419f5fb353a1c4c07, type: 3}
   DogScared: {fileID: -8995398614754969149, guid: b9cec52256018be4bb26f900f952e292, type: 3}
+  DogCaught: {fileID: -3978499211572361511, guid: 12870f8bceaa4824b96903eae6c8ee6f, type: 3}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -323,7 +324,7 @@ GameObject:
   - component: {fileID: 833002963}
   - component: {fileID: 833002964}
   m_Layer: 5
-  m_Name: DrinkSlider
+  m_Name: FoodSlider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -396,9 +397,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1904857500}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 100
+  m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 100
+  m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -574,8 +575,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aa2ba104c88499e4ea9fdb59335be77f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  drinkDelta: 0.002
-  DrinkSlider: {fileID: 833002964}
+  foodDelta: 0.00003
+  FoodSlider: {fileID: 833002964}
   LoseImage: {fileID: 1966581502}
 --- !u!4 &1001003494
 Transform:
@@ -1218,15 +1219,17 @@ MonoBehaviour:
   SkunkAngry: {fileID: -5468902546967967652, guid: 61363b67a7835174baea385d37cffc6f, type: 3}
   phaseTwoThreshold: 0.6
   phaseThreeThreshold: 0.33
-  phaseOneMinIdleTime: 8
-  phaseOneMaxIdleTime: 10
-  phaseTwoMinIdleTime: 5
-  phaseTwoMaxIdleTime: 7
-  phaseThreeMinIdleTime: 1
+  phaseOneMinIdleTime: 6
+  phaseOneMaxIdleTime: 8
+  phaseTwoMinIdleTime: 4
+  phaseTwoMaxIdleTime: 6
+  phaseThreeMinIdleTime: 2
   phaseThreeMaxIdleTime: 4
-  phaseOneLookTime: 5
-  phaseTwoLookTime: 4
-  phaseThreeLookTime: 3
+  phaseOneLookTime: 4
+  phaseTwoLookTime: 3.25
+  phaseThreeLookTime: 2.5
+  minimumWarnTime: 0.75
+  warnPercentageOfIdleTime: 0.2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
